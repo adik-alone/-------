@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-k = 3
+k = 5
 
 E = np.array([])
 D = np.array([])
@@ -11,7 +11,7 @@ for i in range(10000):
         plt.xlabel('Значения')
         plt.ylabel('Частота')
         plt.title('Гистограмма выборки по распределению хи-квадрат')
-        plt.savefig('hist-chi-square.pdf')
+        plt.savefig('hist-chi-square.png')
         # plt.show()
         plt.clf()
     data = np.random.chisquare(k, 10000)
@@ -29,7 +29,7 @@ plt.hist(E, bins=50,  color='skyblue', edgecolor='black')
 plt.xlabel('Значения')
 plt.ylabel('Частота')
 plt.title('Гистограмма срединх выборочных в 10000 выборках')
-plt.savefig('hist-mean.pdf')
+plt.savefig('hist-mean.png')
 # plt.show()
 plt.clf()
 
@@ -37,7 +37,7 @@ plt.hist(D, bins=50,  color='skyblue', edgecolor='black')
 plt.xlabel('Значения')
 plt.ylabel('Частота')
 plt.title('Гистограмма выборочных дисперсий в 10000 выборках')
-plt.savefig('hist-disp.pdf')
+plt.savefig('hist-disp.png')
 # plt.show()
 plt.clf()
 
@@ -45,7 +45,10 @@ plt.hist(M, bins=50,  color='skyblue', edgecolor='black')
 plt.xlabel('Значения')
 plt.ylabel('Частота')
 plt.title('Гистограмма выборочных квантелей порядка 0.5 в 10000 выборках')
-plt.savefig('hist-median.pdf')
+plt.savefig('hist-median.png')
 # plt.show()
 plt.clf()
+
+
+
 
