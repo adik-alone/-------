@@ -5,7 +5,14 @@ k = 5
 E = np.array([])
 D = np.array([])
 M = np.array([])
-for i in range(10000):
+
+counting_samples = 1000
+size_sample = 1000
+
+
+
+
+for i in range(counting_samples):
     if i == 1:
         plt.hist(data, bins=50,  color='skyblue', edgecolor='black')
         plt.xlabel('Значения')
@@ -14,7 +21,7 @@ for i in range(10000):
         plt.savefig('hist-chi-square.png')
         # plt.show()
         plt.clf()
-    data = np.random.chisquare(k, 10000)
+    data = np.random.chisquare(k, size_sample)
     data = np.sort(data)
     # e_loc = sum(data) / 1000
     e_loc = np.mean(data)
@@ -25,29 +32,34 @@ for i in range(10000):
     E = np.append(E, e_loc)
 
 
-plt.hist(E, bins=50,  color='skyblue', edgecolor='black')
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 3, 1)
+plt.hist(E, bins=15,  color='skyblue', edgecolor='black')
 plt.xlabel('Значения')
 plt.ylabel('Частота')
-plt.title('Гистограмма срединх выборочных в 10000 выборках')
-plt.savefig('hist-mean.png')
+plt.title('Средние')
+# plt.savefig('hist-mean.png')
 # plt.show()
-plt.clf()
+# plt.clf()
 
-plt.hist(D, bins=50,  color='skyblue', edgecolor='black')
+plt.subplot(1, 3, 2)
+plt.hist(D, bins=15,  color='skyblue', edgecolor='black')
 plt.xlabel('Значения')
 plt.ylabel('Частота')
-plt.title('Гистограмма выборочных дисперсий в 10000 выборках')
-plt.savefig('hist-disp.png')
+plt.title('Дисперсии')
+# plt.savefig('hist-disp.png')
 # plt.show()
-plt.clf()
+# plt.clf()
 
-plt.hist(M, bins=50,  color='skyblue', edgecolor='black')
+plt.subplot(1, 3, 3)
+plt.hist(M, bins=15,  color='skyblue', edgecolor='black')
 plt.xlabel('Значения')
 plt.ylabel('Частота')
-plt.title('Гистограмма выборочных квантелей порядка 0.5 в 10000 выборках')
-plt.savefig('hist-median.png')
-# plt.show()
-plt.clf()
+plt.title('Квантели порядка 0.5')
+# plt.savefig('hist-median.png')
+plt.savefig('first-exp.png')
+plt.show()
+# plt.clf()
 
 
 
