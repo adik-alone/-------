@@ -3,20 +3,20 @@ import matplotlib.pyplot as plt
 from scipy.stats import gamma, chi
 
 data_gamma = np.random.gamma(2, 1, 10000)
-plt.hist(data_gamma, bins=50,  color='skyblue', edgecolor='black')
+# plt.hist(data_gamma, bins=50,  color='skyblue', edgecolor='black')
 # plt.savefig('gamma.png')
 # plt.show()
-plt.clf()
+# plt.clf()
 
 data_chi = np.random.chisquare(5, 10000)
-plt.hist(data_chi, bins=50,  color='skyblue', edgecolor='black')
+# plt.hist(data_chi, bins=50,  color='skyblue', edgecolor='black')
 # plt.savefig('chi.png')
 # plt.show()
-plt.clf()
+# plt.clf()
 
 shape = 2
 rate = 1
-data_gamma = np.random.gamma(2, 1, 10000)
+# data_gamma = np.random.gamma(2, 1, 10000)
 
 distrib_func_values = []
 values = []
