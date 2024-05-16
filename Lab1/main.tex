@@ -16,13 +16,13 @@
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 
 \title{Лабораторная работа №1}
-\author{Выполнили: Цалов В.С.}
+\author{Выполнили: Цалов В.С. Тахватулин М.В.}
 
 \begin{document}
 \maketitle
 Преподователь: Оранский С.И.
 
-\title{Вариант 4}
+% \title{Вариант 4}
 
 \section{Задание №1}
 \subsection{Выбранное распределение}
@@ -37,9 +37,9 @@
       \includegraphics[width=0.5\linewidth]{Python/chi.png}
 \end{center}
 
-\subsection{Первый эксперемент}
-В ходе данного задания были проведен эксперемент в ходе которого были созданы 10 000 выборок по 1000 значений данного распеределения.
-в этих выборках были подсчитаны: среднее выборочное значение, выборочная дисперсия и выборочный квантиль поярдка 0.5 (медиана выборки) 
+\subsection{Первый эксперимент}
+В ходе данного задания были проведен эксперимент в ходе которого были созданы 1000 выборок по 1000 значений данного распеределения.
+в этих выборках были подсчитаны: среднее выборочное значение, выборочная дисперсия и выборочный квантиль порядка 0.5 (медиана выборки) 
 
 Гистограммы этих значений
 \begin{figure}[H]
@@ -65,12 +65,71 @@
 %       \end{figure}
 % \end{center}
 
-\subsection{Вывод по первыой части}
-Можно заметить, что данные выборки представляют собой нормальное распеределение, что подтвержадется центральной передельной теоремой, которая гласит: бла бла бла
+\subsection{Код}
+\begin{verbatim}
+      import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import gamma, chi
+
+
+
+shape = 2
+rate = 1
+
+distrib_func_values = []
+values = []
+for i in range(1000):
+    distribution = chi(4)
+    samples = np.sort(distribution.rvs(1000))
+    sec_value = samples[1]
+    distrib_func_value = (distribution.cdf(sec_value) * 1000)
+    values.append(distrib_func_value)
+distrib_func_values.append(values)
+
+hist, bins = np.histogram(distrib_func_values, bins=30, density=True)
+plt.bar(bins[:-1], hist, width=np.diff(bins), color='skyblue', alpha=0.7, label='nF(X_2)')
+
+x = np.linspace(0, 20, 100)
+y = gamma.pdf(x, a=shape, scale=1 / rate)
+
+plt.plot(x, y, color='red', linestyle='--', label='Г(2,1)')
+plt.legend()
+plt.tight_layout()
+plt.savefig('second-two-one.png')
+plt.show()
+
+
+
+
+for i in range(1000):
+    distribution = chi(4)
+    samples = np.sort(distribution.rvs(1000))
+    last_value = samples[-1]
+    distrib_func_value = ((1 - distribution.cdf(last_value)) * 1000)
+    values.append(distrib_func_value)
+distrib_func_values.append(values)
+
+hist, bins = np.histogram(distrib_func_values, bins=30, density=True)
+plt.bar(bins[:-1], hist, width=np.diff(bins), color='skyblue', alpha=0.7, label='n(1 - F(X_n))')
+
+shape = 1
+rate = 1
+
+x = np.linspace(0, 10, 50)
+y = gamma.pdf(x, a=shape, scale=1 / rate)
+
+plt.plot(x, y, color='red', linestyle='--', label='Г(1,1)')
+plt.legend()
+plt.tight_layout()
+plt.savefig('second-one-one.png')
+plt.show()
+
+
+\end{verbatim}
 
 
 \subsection{Сравнение с Гамма-распределением}
-Второй эксперемент заключается в том, что нам надо сравнить порядковые статистки с гамма-распределением.
+Второй эксперимент заключается в том, что нам надо сравнить порядковые статистки с гамма-распределением.
 Сортируем каждую выборку для нахождения второй и n-ой порядковой статистики $F(X_{(2)}$ и $F(X_{(n)})$.
 Затем находим значения $nF(X_{(2)}$ и $n(1 - F(X_{(n)}))$ и затем заносим их в выборку.
 Далее генерируем гамма распределение с параметрами $\Gamma(2, 1)$ и $\Gamma(1, 1)$
@@ -80,16 +139,237 @@
 \begin{figure}[H]
       \centering
       \includegraphics[width=0.5\linewidth]{Python/second-two-one.png}
-      % \caption{}
 \end{figure}
 \begin{figure}[H]
       \centering
       \includegraphics[width=0.5\linewidth]{Python/second-one-one.png}
-      % \caption{}
 \end{figure}
 
-В итоге можно заключить, что хи-квадрат распределение является частным случаем гамма-распеределения, что видно из гистограмм.
+\subsection{Код второй части}
+\begin{verbatim}
+      import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import gamma, chi
 
+
+
+shape = 2
+rate = 1
+
+distrib_func_values = []
+values = []
+for i in range(1000):
+    distribution = chi(4)
+    samples = np.sort(distribution.rvs(1000))
+    sec_value = samples[1]
+    distrib_func_value = (distribution.cdf(sec_value) * 1000)
+    values.append(distrib_func_value)
+distrib_func_values.append(values)
+
+hist, bins = np.histogram(distrib_func_values, bins=30, density=True)
+plt.bar(bins[:-1], hist, width=np.diff(bins), color='skyblue', alpha=0.7, label='nF(X_2)')
+
+x = np.linspace(0, 20, 100)
+y = gamma.pdf(x, a=shape, scale=1 / rate)
+
+plt.plot(x, y, color='red', linestyle='--', label='Г(2,1)')
+plt.legend()
+plt.tight_layout()
+plt.savefig('second-two-one.png')
+plt.show()
+
+
+
+
+for i in range(1000):
+    distribution = chi(4)
+    samples = np.sort(distribution.rvs(1000))
+    last_value = samples[-1]
+    distrib_func_value = ((1 - distribution.cdf(last_value)) * 1000)
+    values.append(distrib_func_value)
+distrib_func_values.append(values)
+
+hist, bins = np.histogram(distrib_func_values, bins=30, density=True)
+plt.bar(bins[:-1], hist, width=np.diff(bins), color='skyblue', alpha=0.7, label='n(1 - F(X_n))')
+
+shape = 1
+rate = 1
+
+x = np.linspace(0, 10, 50)
+y = gamma.pdf(x, a=shape, scale=1 / rate)
+
+plt.plot(x, y, color='red', linestyle='--', label='Г(1,1)')
+plt.legend()
+plt.tight_layout()
+plt.savefig('second-one-one.png')
+plt.show()
+
+
+\end{verbatim}
+
+\section{Задание №2. Вариант 4}
+\subsection{Выполнение}
+Из данных надо было найти количество телефонов с различными параметрами.
+
+Итог:
+Количество моделей с двумя симкартами: 1019
+
+Количество моделей поддерживающих 3g: 1523
+
+Наибольшее число ядер у процессора: 8
+
+Далeе надо было посчитать параметры выборки телефонов:
+
+Выборочное среднее емкости аккумулятора: 1238.5185
+
+Выборочная дисперсия емкости аккумулятора: 193088.35983766883
+
+Выборочная медиана емкости аккумулятора: 1226.0
+
+Выборочная квантиль порядка 2/5 емкости аккумулятора: 1076.0
+
+Построить графики.
+Эмперические функции:
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\linewidth]{Python/emper-all-phones.png}
+\end{figure}
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\linewidth]{Python/emper-wi-fi.png}
+\end{figure}
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\linewidth]{Python/emper-without-wifi.png}
+\end{figure}
+
+Гистограммы
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\linewidth]{Python/hist-all-phones.png}
+\end{figure}
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\linewidth]{Python/hist-wi-fi.png}
+\end{figure}
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\linewidth]{Python/hist-without-wi-fi.png}
+\end{figure}
+
+Box-plot:
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\linewidth]{Python/box-plot.png}
+\end{figure}
+
+\subsection{Код}
+\begin{verbatim}
+      import pandas as pd
+import matplotlib.pyplot as plt
+
+# Загрузка данных из файла
+df = pd.read_csv('mobile_phones.csv', delimiter=",", skiprows=1, names=['battery_power','blue','clock_speed','dual_sim',
+                                                            'fc','four_g','int_memory','m_dep','mobile_wt','n_cores',
+                                                            'pc','px_height','px_width','ram','sc_h','sc_w','talk_time',
+                                                            'three_g','touch_screen','wifi','price_range'])
+
+print(df[['dual_sim', 'n_cores', 'three_g']])
+
+dual_sim_cnt = sum(df['dual_sim'])
+three_g_cnt = sum(df['three_g'] == 1)
+max_cores = max(df['n_cores'])
+
+print("Количество моделей с двумя симкартами:", dual_sim_cnt)
+print("Количество моделей поддерживающих 3g:", three_g_cnt)
+print("Наибольшее число ядер у процессора:", max_cores)
+
+srednee_battery_power = df['battery_power'].mean()
+dispersia_battery_power = df['battery_power'].var()
+mediana_battery_power = df['battery_power'].median()
+kvantil_battery_power = df['battery_power'].quantile(2 / 5)
+
+print("Выборочное среднее емкости аккумулятора:", srednee_battery_power)
+print("Выборочная дисперсия емкости аккумулятора:", dispersia_battery_power)
+print("Выборочная медиана емкости аккумулятора:", mediana_battery_power)
+print("Выборочная квантиль порядка 2/5 емкости аккумулятора:", kvantil_battery_power)
+
+
+with_wifi = df[df['wifi'] == 1]['battery_power']
+without_wifi = df[df['wifi'] == 0]['battery_power']
+
+# empericheskaya func
+plt.figure(figsize=(10, 5))
+plt.hist(df['battery_power'], bins=30, density=True, cumulative=True, histtype='step', label='Все телефоны', color='blue')
+plt.xlabel('Емкость аккумулятора')
+plt.ylabel('Эмпирическая функция распределения')
+plt.title('График эмпирической функции распределения емкости аккумулятора')
+plt.legend()
+plt.grid(True)
+plt.savefig('emper-all-phones.png')
+plt.show()
+
+plt.figure(figsize=(10, 5))
+plt.hist(with_wifi, bins=30, density=True, cumulative=True, histtype='step', label='С Wi-Fi', color='green')
+plt.xlabel('Емкость аккумулятора')
+plt.ylabel('Эмпирическая функция распределения')
+plt.title('График эмпирической функции распределения емкости аккумулятора')
+plt.legend()
+plt.grid(True)
+plt.savefig('emper-wi-fi.png')
+plt.show()
+
+plt.figure(figsize=(10, 5))
+plt.hist(without_wifi, bins=30, density=True, cumulative=True, histtype='step', label='Без Wi-Fi', color='red')
+plt.xlabel('Емкость аккумулятора')
+plt.ylabel('Эмпирическая функция распределения')
+plt.title('График эмпирической функции распределения емкости аккумулятора')
+plt.legend()
+plt.grid(True)
+plt.savefig('emper-without-wifi.png')
+plt.show()
+
+# gistogramma
+plt.figure(figsize=(10, 5))
+plt.hist(df['battery_power'], bins=30, alpha=0.7, label='Все телефоны', color='blue')
+plt.xlabel('Емкость аккумулятора')
+plt.ylabel('Частота')
+plt.title('Гистограмма емкости аккумулятора')
+plt.legend()
+plt.grid(True)
+plt.savefig('hist-all-phones.png')
+plt.show()
+
+plt.figure(figsize=(10, 5))
+plt.hist(with_wifi, bins=30, alpha=0.7, label='С Wi-Fi', color='green')
+plt.xlabel('Емкость аккумулятора')
+plt.ylabel('Частота')
+plt.title('Гистограмма емкости аккумулятора')
+plt.legend()
+plt.grid(True)
+plt.savefig('hist-wi-fi.png')
+plt.show()
+
+plt.figure(figsize=(10, 5))
+plt.hist(without_wifi, bins=30, alpha=0.7, label='Без Wi-Fi', color='red')
+plt.xlabel('Емкость аккумулятора')
+plt.ylabel('Частота')
+plt.title('Гистограмма емкости аккумулятора')
+plt.legend()
+plt.grid(True)
+plt.savefig('hist-without-wi-fi.png')
+plt.show()
+
+# box plot
+plt.figure(figsize=(10, 5))
+plt.boxplot([df['battery_power'], with_wifi, without_wifi], labels=['Все телефоны', 'С Wi-Fi', 'Без Wi-Fi'])
+plt.ylabel('Емкость аккумулятора')
+plt.title('Box-plot для емкости аккумулятора')
+plt.grid(True)
+plt.savefig('box-plot.png')
+plt.show()
+
+\end{verbatim}
 
 
 \end{document}
