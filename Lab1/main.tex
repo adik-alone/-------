@@ -24,8 +24,9 @@
 
 % \title{Вариант 4}
 
-\section{Задание №1}
-\subsection{Выбранное распределение}
+\section{Задание №1}\label{sec:-no1}
+
+\subsection{Выбранное распределение}\label{subsec:-}
 
 В качестве распределения было выбрано распределение хи-квадрат.
 Плотность распределения будет здесь может быть
@@ -34,38 +35,22 @@
 
 \begin{center}
       \centering
-      \includegraphics[width=0.5\linewidth]{Python/chi.png}
+      \includegraphics[width=0.5\linewidth]{Python/chi}
 \end{center}
 
-\subsection{Первый эксперимент}
+\subsection{Первый эксперимент}\label{subsec:-2}
 В ходе данного задания были проведен эксперимент в ходе которого были созданы 1000 выборок по 1000 значений данного распеределения.
-в этих выборках были подсчитаны: среднее выборочное значение, выборочная дисперсия и выборочный квантиль порядка 0.5 (медиана выборки) 
+в этих выборках были подсчитаны: среднее выборочное значение, выборочная дисперсия и выборочный квантиль порядка 0.5 (медиана выборки)
 
 Гистограммы этих значений
 \begin{figure}[H]
       \centering
-      \includegraphics[width=0.8\linewidth]{Python/first-exp.png}
-      \caption{Гистограммы параметров выборки}
+      \includegraphics[width=0.8\linewidth]{Python/first-exp}
+      \caption{Гистограммы параметров выборки}\label{fig:figure}
 \end{figure}
-% \begin{center}
-%       \begin{figure}
-%             \centering
-%             \includegraphics[width=0.5\linewidth]{Python/hist-mean.png}
-%             \caption{Среднее выборочное значение для всех выборок}
-%       \end{figure}
-%       \begin{figure}
-%             \centering
-%             \includegraphics[width=0.5\linewidth]{Python/hist-mean.png}
-%             \caption{Среднее выборочное значение для всех выборок}
-%       \end{figure}
-%       \begin{figure}
-%             \centering
-%             \includegraphics[width=0.5\linewidth]{Python/hist-mean.png}
-%             \caption{Среднее выборочное значение для всех выборок}
-%       \end{figure}
-% \end{center}
 
-\subsection{Код}
+
+\subsection{Код}\label{subsec:}
 \begin{verbatim}
       import numpy as np
 import matplotlib.pyplot as plt
@@ -128,7 +113,7 @@ plt.show()
 \end{verbatim}
 
 
-\subsection{Сравнение с Гамма-распределением}
+\subsection{Сравнение с Гамма-распределением}\label{subsec:---}
 Второй эксперимент заключается в том, что нам надо сравнить порядковые статистки с гамма-распределением.
 Сортируем каждую выборку для нахождения второй и n-ой порядковой статистики $F(X_{(2)}$ и $F(X_{(n)})$.
 Затем находим значения $nF(X_{(2)}$ и $n(1 - F(X_{(n)}))$ и затем заносим их в выборку.
@@ -138,14 +123,15 @@ plt.show()
 
 \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\linewidth]{Python/second-two-one.png}
-\end{figure}
-\begin{figure}[H]
-      \centering
-      \includegraphics[width=0.5\linewidth]{Python/second-one-one.png}
+      \includegraphics[width=0.5\linewidth]{Python/second-two-one}\label{fig:figure2}
 \end{figure}
 
-\subsection{Код второй части}
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\linewidth]{Python/second-one-one}\label{fig:figure3}
+\end{figure}
+
+\subsection{Код второй части}\label{subsec:--}
 \begin{verbatim}
       import numpy as np
 import matplotlib.pyplot as plt
@@ -207,8 +193,9 @@ plt.show()
 
 \end{verbatim}
 
-\section{Задание №2. Вариант 4}
-\subsection{Выполнение}
+\section{Задание №2. Вариант 4}\label{sec:-no2.--4}
+
+\subsection{Выполнение}\label{subsec:2}
 Из данных надо было найти количество телефонов с различными параметрами.
 
 Итог:
@@ -232,47 +219,53 @@ plt.show()
 Эмперические функции:
 \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\linewidth]{Python/emper-all-phones.png}
+      \includegraphics[width=0.5\linewidth]{Python/emper-all-phones}\label{fig:figure4}
 \end{figure}
+
 \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\linewidth]{Python/emper-wi-fi.png}
+      \includegraphics[width=0.5\linewidth]{Python/emper-wi-fi}\label{fig:figure5}
 \end{figure}
+
 \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\linewidth]{Python/emper-without-wifi.png}
+      \includegraphics[width=0.5\linewidth]{Python/emper-without-wifi}\label{fig:figure6}
 \end{figure}
 
 Гистограммы
 \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\linewidth]{Python/hist-all-phones.png}
+      \includegraphics[width=0.5\linewidth]{Python/hist-all-phones}\label{fig:figure7}
 \end{figure}
+
 \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\linewidth]{Python/hist-wi-fi.png}
+      \includegraphics[width=0.5\linewidth]{Python/hist-wi-fi}\label{fig:figure8}
 \end{figure}
+
 \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\linewidth]{Python/hist-without-wi-fi.png}
+      \includegraphics[width=0.5\linewidth]{Python/hist-without-wi-fi}\label{fig:figure9}
 \end{figure}
 
 Box-plot:
 \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\linewidth]{Python/box-plot.png}
+      \includegraphics[width=0.5\linewidth]{Python/box-plot}\label{fig:figure10}
 \end{figure}
 
-\subsection{Код}
+\subsection{Код}\label{subsec:3}
 \begin{verbatim}
-      import pandas as pd
+
+    import pandas as pd
 import matplotlib.pyplot as plt
 
 # Загрузка данных из файла
-df = pd.read_csv('mobile_phones.csv', delimiter=",", skiprows=1, names=['battery_power','blue','clock_speed','dual_sim',
-                                                            'fc','four_g','int_memory','m_dep','mobile_wt','n_cores',
-                                                            'pc','px_height','px_width','ram','sc_h','sc_w','talk_time',
-                                                            'three_g','touch_screen','wifi','price_range'])
+df = pd.read_csv('mobile_phones.csv', delimiter=",", skiprows=1, names=[
+                'battery_power', 'blue', 'clock_speed', 'dual_sim',
+                'fc', 'four_g', 'int_memory', 'm_dep', 'mobile_wt', 'n_cores',
+                'pc', 'px_height', 'px_width', 'ram', 'sc_h', 'sc_w', 'talk_time',
+                'three_g', 'touch_screen', 'wifi', 'price_range'])
 
 print(df[['dual_sim', 'n_cores', 'three_g']])
 
@@ -300,7 +293,8 @@ without_wifi = df[df['wifi'] == 0]['battery_power']
 
 # empericheskaya func
 plt.figure(figsize=(10, 5))
-plt.hist(df['battery_power'], bins=30, density=True, cumulative=True, histtype='step', label='Все телефоны', color='blue')
+plt.hist(df['battery_power'], bins=30, density=True, cumulative=True,
+         histtype='step', label='Все телефоны', color='blue')
 plt.xlabel('Емкость аккумулятора')
 plt.ylabel('Эмпирическая функция распределения')
 plt.title('График эмпирической функции распределения емкости аккумулятора')
@@ -310,7 +304,8 @@ plt.savefig('emper-all-phones.png')
 plt.show()
 
 plt.figure(figsize=(10, 5))
-plt.hist(with_wifi, bins=30, density=True, cumulative=True, histtype='step', label='С Wi-Fi', color='green')
+plt.hist(with_wifi, bins=30, density=True, cumulative=True,
+         histtype='step', label='С Wi-Fi', color='green')
 plt.xlabel('Емкость аккумулятора')
 plt.ylabel('Эмпирическая функция распределения')
 plt.title('График эмпирической функции распределения емкости аккумулятора')
@@ -320,7 +315,8 @@ plt.savefig('emper-wi-fi.png')
 plt.show()
 
 plt.figure(figsize=(10, 5))
-plt.hist(without_wifi, bins=30, density=True, cumulative=True, histtype='step', label='Без Wi-Fi', color='red')
+plt.hist(without_wifi, bins=30, density=True, cumulative=True,
+         histtype='step', label='Без Wi-Fi', color='red')
 plt.xlabel('Емкость аккумулятора')
 plt.ylabel('Эмпирическая функция распределения')
 plt.title('График эмпирической функции распределения емкости аккумулятора')
@@ -331,7 +327,8 @@ plt.show()
 
 # gistogramma
 plt.figure(figsize=(10, 5))
-plt.hist(df['battery_power'], bins=30, alpha=0.7, label='Все телефоны', color='blue')
+plt.hist(df['battery_power'], bins=30, alpha=0.7,
+         label='Все телефоны', color='blue')
 plt.xlabel('Емкость аккумулятора')
 plt.ylabel('Частота')
 plt.title('Гистограмма емкости аккумулятора')
@@ -341,7 +338,8 @@ plt.savefig('hist-all-phones.png')
 plt.show()
 
 plt.figure(figsize=(10, 5))
-plt.hist(with_wifi, bins=30, alpha=0.7, label='С Wi-Fi', color='green')
+plt.hist(with_wifi, bins=30, alpha=0.7,
+         label='С Wi-Fi', color='green')
 plt.xlabel('Емкость аккумулятора')
 plt.ylabel('Частота')
 plt.title('Гистограмма емкости аккумулятора')
@@ -351,7 +349,8 @@ plt.savefig('hist-wi-fi.png')
 plt.show()
 
 plt.figure(figsize=(10, 5))
-plt.hist(without_wifi, bins=30, alpha=0.7, label='Без Wi-Fi', color='red')
+plt.hist(without_wifi, bins=30, alpha=0.7,
+         label='Без Wi-Fi', color='red')
 plt.xlabel('Емкость аккумулятора')
 plt.ylabel('Частота')
 plt.title('Гистограмма емкости аккумулятора')
@@ -362,7 +361,8 @@ plt.show()
 
 # box plot
 plt.figure(figsize=(10, 5))
-plt.boxplot([df['battery_power'], with_wifi, without_wifi], labels=['Все телефоны', 'С Wi-Fi', 'Без Wi-Fi'])
+plt.boxplot([df['battery_power'], with_wifi, without_wifi],
+            labels=['Все телефоны', 'С Wi-Fi', 'Без Wi-Fi'])
 plt.ylabel('Емкость аккумулятора')
 plt.title('Box-plot для емкости аккумулятора')
 plt.grid(True)
