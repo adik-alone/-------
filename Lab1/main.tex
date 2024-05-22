@@ -55,6 +55,7 @@
 
 \subsection{Вывод по первой части}
 Изучая полученные графики можно заметить, что они очень похожи на нормальное распределение.
+
 Таким образом можем предположить, что данное задание было направленно на понимание центральной предельной теормы.
 Данная теорма заключается в том, что большая выборка независимых величин, подчиняющихся одному и тому же закону распределения, стремится к нормальному.
 Что и можно увидеть в этом задании
@@ -125,10 +126,11 @@ plt.show()
 \end{verbatim}
 
 
-\subsection{Сравнение с Гамма-распределением}\label{subsec:---}
+\subsection{Вторая часть}\label{subsec:---}
 Второй эксперимент заключается в том, что нам надо сравнить порядковые статистки с гамма-распределением.
-Сортируем каждую выборку для нахождения второй и n-ой порядковой статистики $F(X_{(2)}$ и $F(X_{(n)})$.
-Затем находим значения $nF(X_{(2)}$ и $n(1 - F(X_{(n)}))$ и затем заносим их в выборку.
+
+Сортируем каждую выборку для нахождения второй и n-ой порядковой статистики $F(X_{(2)})$ и $F(X_{(n)})$.
+Затем находим значения $nF(X_{(2)})$ и $n(1 - F(X_{(n)}))$ и затем заносим их в выборку.
 Далее генерируем гамма распределение с параметрами $\Gamma(2, 1)$ и $\Gamma(1, 1)$
 
 В итоге получаем такие графики:
@@ -143,17 +145,24 @@ plt.show()
       \includegraphics[width=0.5\linewidth]{Python/second-one-one}\label{fig:figure3}
 \end{figure}
 
+\subsection{Вывод по второй части}
+Изучая полученные графики, можно увидеть, что распределение порядковых статистик подчинено гамма закону распределения.
+
+Таким образом мы проверили теорему о порядковых статистиках,
+которая говорит о том, что порядковые статистики имеют гамма распределение.
+
+
 \subsection{Код второй части}\label{subsec:--}
 \begin{verbatim}
-      import numpy as np
+import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import gamma, chi
 
-
-
+# Параметры гамма распределения
 shape = 2
 rate = 1
 
+# Нахождение второй порядковой статистики
 distrib_func_values = []
 values = []
 for i in range(1000):
@@ -167,18 +176,20 @@ distrib_func_values.append(values)
 hist, bins = np.histogram(distrib_func_values, bins=30, density=True)
 plt.bar(bins[:-1], hist, width=np.diff(bins), color='skyblue', alpha=0.7, label='nF(X_2)')
 
+# Гамма распределение
 x = np.linspace(0, 20, 100)
 y = gamma.pdf(x, a=shape, scale=1 / rate)
 
+# Посторение графика
 plt.plot(x, y, color='red', linestyle='--', label='Г(2,1)')
 plt.legend()
 plt.tight_layout()
-plt.savefig('second-two-one.png')
+# plt.savefig('second-two-one.png')
 plt.show()
 
 
 
-
+# Нахождение последней порядковой статистики
 for i in range(1000):
     distribution = chi(4)
     samples = np.sort(distribution.rvs(1000))
@@ -190,19 +201,20 @@ distrib_func_values.append(values)
 hist, bins = np.histogram(distrib_func_values, bins=30, density=True)
 plt.bar(bins[:-1], hist, width=np.diff(bins), color='skyblue', alpha=0.7, label='n(1 - F(X_n))')
 
+# Новые параметры гамма распеределения
 shape = 1
 rate = 1
 
+# Построение гамма распределения
 x = np.linspace(0, 10, 50)
 y = gamma.pdf(x, a=shape, scale=1 / rate)
 
+# Построение графика
 plt.plot(x, y, color='red', linestyle='--', label='Г(1,1)')
 plt.legend()
 plt.tight_layout()
 plt.savefig('second-one-one.png')
 plt.show()
-
-
 \end{verbatim}
 
 \section{Задание №2. Вариант 4}\label{sec:-no2.--4}
