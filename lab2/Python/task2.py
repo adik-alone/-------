@@ -6,6 +6,7 @@ p_true = 0.7
 n = 100
 alpha = 0.05
 
+
 # Генерация выборки из геометрического распределения
 # np.random.geometric генерирует числа в диапазоне [1, ∞), поэтому нужно сдвинуть
 sample = np.random.geometric(p_true, size=n)
