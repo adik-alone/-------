@@ -24,16 +24,16 @@ for i in range(1000):
 
     crit = stats.norm.ppf(1 - alpha / 2)
 
-    ci_lower1 = p_hat1 - crit * se1
-    ci_upper1 = p_hat1 + crit * se1
+    CI_low1 = p_hat1 - crit * se1
+    CI_high1 = p_hat1 + crit * se1
 
-    ci_lower2 = p_hat2 - crit * se2
-    ci_upper2 = p_hat2 + crit * se2
+    CI_low2 = p_hat2 - crit * se2
+    CI_high2 = p_hat2 + crit * se2
 
-    if ci_lower1 <= p <= ci_upper1:
+    if CI_low1 <= p <= CI_high1:
         total1 += 1
 
-    if ci_lower2 <= p <= ci_upper2:
+    if CI_low2 <= p <= CI_high2:
         total2 += 1
 
     probability1 = total1 / 1000
