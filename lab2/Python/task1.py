@@ -2,11 +2,10 @@ import numpy as np
 import scipy.stats as stats
 
 # Параметры задачи
+n1, n2 = 25, 25
 mu1, mu2 = 0, 0
 sigma1, sigma2 = 2, 1
 alpha = 0.05
-
-
 def sol(n1, n2, mu1, mu2, sigma1, sigma2, alpha):
     total = 0
     probability = 0
