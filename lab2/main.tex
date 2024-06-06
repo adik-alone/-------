@@ -32,18 +32,136 @@
 \subsection{Текст задания}
 Сгенерируйте 2 выборки объёма 25 и посчитайте доверительный интервал. Повторить 1000 раз. Посчитайте, сколько раз 95-
 процентный доверительный интервал покрывает реальное значение параметра. То же самое
-сделайте для объема выборки 10000.
+сделайте для объема выборки 10 000.
 
 \subsection{Выполнение}
-Генерируем выборку. 
-Много выборок, много много много выборок
-руддддуалддлаовыж
+В ходе эксперимента были сгенерированы 1000 выборок из задания. 
+После этого найдены их выборочные дисперсии и, с помощью распределения Фишера найден доверительный интервал для отношения дисперсий.
+Тоже самое было сделано для выборки размеров в 10 000. 
+
+\subsection{Вывод программы}
+вывод:\newline
+объем выборки 25:\newline
+попавшие - 944, точность - 0.944\newline
+объем выборки 10к:\newline
+попавшие - 952, точность - 0.952
+
+
+\subsection{Программа}
+\begin{verbatim}
+import numpy as np
+import scipy.stats as stats
+
+# Параметры задачи
+mu1, mu2 = 0, 0
+sigma1, sigma2 = 2, 1
+alpha = 0.05
+
+
+def sol(n1, n2, mu1, mu2, sigma1, sigma2, alpha):
+    total = 0
+    probability = 0
+    for i in range(1000):
+        # генерация выборок
+        X1 = np.random.normal(mu1, np.sqrt(sigma1), n1)
+        X2 = np.random.normal(mu2, np.sqrt(sigma2), n2)
+
+        # выборочные дисперсии
+        S1 = np.var(X1, ddof=1)
+        S2 = np.var(X2, ddof=1)
+
+        tau = S1 / S2
+        tau_real = sigma1 / sigma2
+
+        # криты распределения фишера
+        F_low = stats.f.ppf(alpha / 2, n1 - 1, n2 - 1)
+        F_high = stats.f.ppf(1 - alpha / 2, n1 - 1, n2 - 1)
+
+        # доверительный интервал
+        CI_low = tau / F_high
+        CI_high = tau / F_low
+
+        if CI_low <= tau_real <= CI_high:
+            total += 1
+
+    probability = total / 1000
+    return total, probability
+
+
+total1, probability1 = sol(25, 25, mu1, mu2, sigma1, sigma2, alpha)
+print(f"объем выборки 25:")
+print(f"попавшие - {total1}, точность - {probability1}")
+
+total1, probability1 = sol(10000, 10000, mu1, mu2, sigma1, sigma2, alpha)
+print(f"объем выборки 10к:")
+print(f"попавшие - {total1}, точность - {probability1}")
+\end{verbatim}
+
+\subsection{Вывод}
+Результаты программы подтверждают говорят, что около 5\% всех попыток не попадают в доверительный интервал. Что соответствует теории.
 
 \section{Задание №2. Вариант 4}
 \subsection{Текст задания}
 Постройте асимптотический доверительный интервал уровня $1 - \alpha$ для указанного параметра. Проведите эксперимент по схеме, аналогичной первой задаче.
-
-Вариант 4 = $Geom(p), p = 0.7$
+Вариант 4:\newline
+$Geom(p), p = 0.7$
 \subsection{Выполнение}
+В ходе эксперимента генерируем две выборки, одну размером 25, другую 10000. После находим оценку параметра p. Затем стандартуню ошибку и критическое значение. После этого находим верхние и нижние границы асимптотических доверительных интервалов и проверяем попадание параметра в них.
+
+\subsection{Вывод программы}
+Вывод:\newline
+попавшие - 986, точность - 0.986\newline
+попавшие - 1000, точность - 1.0
+
+\subsection{Программа}
+\begin{verbatim}
+import numpy as np
+import scipy.stats as stats
+
+p = 0.7
+alpha = 0.05
+n1 = 25
+n2 = 10000
+total1 = 0
+total2 = 0
+probability1 = 0
+probability2 = 0
+
+for i in range(1000):
+    X1 = np.random.geometric(p, n1)
+    X2 = np.random.geometric(p, n2)
+
+    # оценка мат ожидания
+    p_hat1 = 1 / np.mean(X1)
+    p_hat2 = 1 / np.mean(X2)
+
+    # стандартная ошибка
+    se1 = np.sqrt((1 - p_hat1) / (n1 * p_hat1 ** 2))
+    se2 = np.sqrt((1 - p_hat2) / (n2 * p_hat2 ** 2))
+
+    crit = stats.norm.ppf(1 - alpha / 2)
+
+    ci_low1 = p_hat1 - crit * se1
+    ci_upp1 = p_hat1 + crit * se1
+
+    ci_low2 = p_hat2 - crit * se2
+    ci_upp2 = p_hat2 + crit * se2
+
+    if ci_low1 <= p <= ci_upp1:
+        total1 += 1
+
+    if ci_low2 <= p <= ci_upp2:
+        total2 += 1
+
+    probability1 = total1 / 1000
+    probability2 = total2 / 1000
+
+
+print(f"попавшие - {total1}, точность - {probability1}")
+print(f"попавшие - {total2}, точность - {probability2}")
+\end{verbatim}
+
+\subsection{Вывод}
+Можно сделать вывод, что при увеличении размера выборки до 10.000 вероятность ошибики значительно уменьшается, так как в знаменателе $10.000 ^ 2$. Таким образом из 1000 эксперементов попали все
 
 \end{document}
