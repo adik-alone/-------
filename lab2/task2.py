@@ -18,6 +18,7 @@ for i in range(1000):
     p_hat1 = 1 / np.mean(X1)
     p_hat2 = 1 / np.mean(X2)
 
+    # стандартная ошибка
     se1 = np.sqrt((1 - p_hat1) / (n1 * p_hat1 ** 2))
     se2 = np.sqrt((1 - p_hat2) / (n2 * p_hat2 ** 2))
 
