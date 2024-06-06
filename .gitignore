@@ -305,6 +305,8 @@ venv
 __pycache__
 
 figures
+# Python idea
+.idea
 
 # latexmk-generated dependents 
 .deps.d
