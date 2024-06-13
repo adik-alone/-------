@@ -6,27 +6,40 @@ n1, n2 = 25, 25
 mu1, mu2 = 0, 0
 sigma1, sigma2 = 2, 1
 alpha = 0.05
+def sol(n1, n2, mu1, mu2, sigma1, sigma2, alpha):
+    total = 0
+    probability = 0
+    for i in range(1000):
+        # генерация выборок
+        X1 = np.random.normal(mu1, np.sqrt(sigma1), n1)
+        X2 = np.random.normal(mu2, np.sqrt(sigma2), n2)
 
-# Генерация выборок
-# Генерирует массив чисел, распределенных по нормальному закону
-X1 = np.random.normal(mu1, np.sqrt(sigma1), n1)
-X2 = np.random.normal(mu2, np.sqrt(sigma2), n2)
+        # выборочные дисперсии
+        S1 = np.var(X1, ddof=1)
+        S2 = np.var(X2, ddof=1)
 
-# Выборочные дисперсии
-# ddof=1, чтобы получить несмещённую оценку дисперсии (деление на n-1)
-S1 = np.var(X1)
-S2 = np.var(X2)
+        tau = S1 / S2
+        tau_real = sigma1 / sigma2
 
-# Оценка отношения дисперсий
-tau_hat = (n2 * S1) / (n1 * S2)
-print(f"Оценка отношения дисперсий: {tau_hat}")
+        # криты распределения фишера
+        F_low = stats.f.ppf(alpha / 2, n1 - 1, n2 - 1)
+        F_high = stats.f.ppf(1 - alpha / 2, n1 - 1, n2 - 1)
 
-# Критические значения распределения Фишера
-F_low = stats.f.ppf(alpha / 2, dfn=n1-1, dfd=n2-1)
-F_high = stats.f.ppf(1 - alpha / 2, dfn=n1-1, dfd=n2-1)
+        # доверительный интервал
+        CI_low = tau / F_high
+        CI_high = tau / F_low
 
-# Доверительный интервал
-CI_low = tau_hat / F_high
-CI_high = tau_hat / F_low
+        if CI_low <= tau_real <= CI_high:
+            total += 1
 
-print(f"Доверительный интервал для отношения дисперсий: ({CI_low}, {CI_high})")
+    probability = total / 1000
+    return total, probability
+
+
+total1, probability1 = sol(25, 25, mu1, mu2, sigma1, sigma2, alpha)
+print(f"объем выборки 25:")
+print(f"попавшие - {total1}, точность - {probability1}")
+
+total1, probability1 = sol(10000, 10000, mu1, mu2, sigma1, sigma2, alpha)
+print(f"объем выборки 10к:")
+print(f"попавшие - {total1}, точность - {probability1}")

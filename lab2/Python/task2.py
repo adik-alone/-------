@@ -1,30 +1,44 @@
 import numpy as np
-from scipy.stats import norm
+import scipy.stats as stats
 
-# Параметры
-p_true = 0.7
-n = 100
+p = 0.7
 alpha = 0.05
+n1 = 25
+n2 = 10000
+total1 = 0
+total2 = 0
+probability1 = 0
+probability2 = 0
+
+for i in range(1000):
+    X1 = np.random.geometric(p, n1)
+    X2 = np.random.geometric(p, n2)
+
+    # оценка мат ожидания
+    p_hat1 = 1 / np.mean(X1)
+    p_hat2 = 1 / np.mean(X2)
+
+    # стандартная ошибка
+    se1 = np.sqrt((1 - p_hat1) / (n1 * p_hat1 ** 2))
+    se2 = np.sqrt((1 - p_hat2) / (n2 * p_hat2 ** 2))
+
+    crit = stats.norm.ppf(1 - alpha / 2)
+
+    CI_low1 = p_hat1 - crit * se1
+    CI_high1 = p_hat1 + crit * se1
+
+    CI_low2 = p_hat2 - crit * se2
+    CI_high2 = p_hat2 + crit * se2
+
+    if CI_low1 <= p <= CI_high1:
+        total1 += 1
+
+    if CI_low2 <= p <= CI_high2:
+        total2 += 1
+
+    probability1 = total1 / 1000
+    probability2 = total2 / 1000
 
 
-# Генерация выборки из геометрического распределения
-# np.random.geometric генерирует числа в диапазоне [1, ∞), поэтому нужно сдвинуть
-sample = np.random.geometric(p_true, size=n)
-
-# Вычисление оценочной вероятности успеха p
-mean_X = np.mean(sample)
-p_hat = 1 / mean_X
-
-# Стандартная ошибка оценки
-se_p_hat = np.sqrt(p_hat * (1 - p_hat) / (n * (1 - p_hat)**2))
-
-# Квантиль стандартного нормального распределения для заданного уровня значимости
-z = norm.ppf(1 - alpha / 2)
-
-# Доверительный интервал
-ci_lower = p_hat - z * se_p_hat
-ci_upper = p_hat + z * se_p_hat
-
-print(f'Оценка p: {p_hat}')
-print(f'Стандартная ошибка: {se_p_hat}')
-print(f'Доверительный интервал для p: ({ci_lower}, {ci_upper})')
+print(f"попавшие - {total1}, точность - {probability1}")
+print(f"попавшие - {total2}, точность - {probability2}")
