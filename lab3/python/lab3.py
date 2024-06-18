@@ -73,11 +73,12 @@ def ratings(data):
 
 # Ту же самую задачу решить с помощью другого
 # критерия (тоже формализовать гипотезы, но здесь можно воспользоваться готовой реализацией)
-def auto_cecker(data):
-    # Проверить выборку на нормальность
+def auto_checker_rating(data):
+    # Проверяем выборку на нормальность c помощью критерия Колмогорова-Смирнова
     statistic, pvalue = stats.kstest(data["total_rating"], 'norm')
 
-    alpha = 0.05  # Уровень значимости
+    # Уровень значимости
+    alpha = 0.05
     if pvalue > alpha:
         print("Гипотеза о нормальности распределения не отвергается.")
     else:
@@ -86,14 +87,28 @@ def auto_cecker(data):
 
 # Задание 2: Проверка однородности и построение графика
 def xi_square_ages(data, age):
+    print("\n")
+    print("Проверка гипотезы о том, что выборки молодых и возрастных футболистов однородны:")
+    # Гипотеза 0 - выборки молодых и возрастных футболистов однородны
+    # Гипотеза 1 - выборки молодых и возрастных футболистов не однородны
+
     young = data[data['Age'] < age]['total_rating']
     old = data[data['Age'] >= age]['total_rating']
 
     observed_young, bins = np.histogram(young, bins='auto')
     observed_old, old_bins = np.histogram(old, bins=bins)
     observed_young = observed_young * (observed_old.sum() / observed_young.sum())
+    count_str_1 = observed_young.shape[0]
+    count_str_2 = observed_old.shape[0]
 
-    xi_square_nabl = stats.chi2_contingency([observed_young, observed_old])
+    xi_square_nabl = stats.chi2_contingency([observed_young, observed_old])[0]
+    # xi_square_nabl = stats.chi2_contingency([young, old])[0]
+    print(f'наблюдаемое значение критерия: {xi_square_nabl}')
+
+    # подсчёт количества степеней свободы
+    df = (count_str_1 - 1) * (count_str_2 - 1)
+    xi_square_crit = stats.chi2.ppf(0.95, df)
+    print(f'критическое значение критерия: {xi_square_crit}')
 
     plt.figure(figsize=(10, 6))
     plt.hist(young, bins=bins, label='Young', color='blue')
@@ -104,8 +119,30 @@ def xi_square_ages(data, age):
     plt.legend()
     plt.show()
 
+    if xi_square_crit > xi_square_nabl:
+        print("нет оснований отвергать нулевую гипотезу -> выборки однородны")
+    else:
+        print("есть основания отвергать нулевую гипотезу -> выборки не однородны")
+
+    auto_checker_age(young, old)
+
     return xi_square_nabl
 
+def auto_checker_age(sample1, sample2):
+    # Критерий Колмогорова-Смирнова
+    statistic, pvalue = stats.ks_2samp(sample1, sample2)
+
+
+    print("\n")
+    print("Проверка гипотезы о том, что выборки молодых и возрастных футболистов однородны с помощью критерия Колмогорова-Смирнова:")
+    print(f"Статистика Колмогорова-Смирнова: {statistic}")
+    print(f"p-значение: {pvalue}")
+
+    alpha = 0.05
+    if pvalue < alpha:
+        print("Отвергаем нулевую гипотезу: выборки неоднородны.")
+    else:
+        print("Нет оснований отвергать нулевую гипотезу: выборки однородны.")
 
 # Задание 3: Проверка независимости и построение графика
 # def chi_squared_test_independence(data):
@@ -125,7 +162,7 @@ def xi_square_ages(data, age):
 ratings(data)
 print("\n")
 print("Критерий Колмогорова-Смирнова")
-auto_cecker(data)
+auto_checker_rating(data)
 
 age = 30
 xi_square = xi_square_ages(data, age)
