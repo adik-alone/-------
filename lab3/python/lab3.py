@@ -62,6 +62,7 @@ def ratings(data):
     plt.ylabel('Frequency')
     plt.title('Chi-Squared Test for Normality')
     plt.legend()
+    # plt.savefig('task1.png')
     plt.show()
 
     if xi_square_crit > xi_square_nabl:
