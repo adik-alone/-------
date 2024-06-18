@@ -10,8 +10,6 @@ counting_samples = 1000
 size_sample = 1000
 
 
-
-
 for i in range(counting_samples):
     if i == 1:
         plt.hist(data, bins=50,  color='skyblue', edgecolor='black')

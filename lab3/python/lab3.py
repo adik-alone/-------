@@ -1,8 +1,10 @@
+import math
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
+import matplotlib.pyplot as plt
 
-df = pd.read_csv('fifa_players_stats.csv', delimiter=",", skiprows=1, names=[
+data = pd.read_csv('fifa_players_stats.csv', delimiter=",", skiprows=1, names=[
     'Known As', 'Full Name', 'Overall', 'Potential', 'Value(in Euro)', 'Positions Played',
     'Best Position', 'Nationality', 'Image Link', 'Age', 'Height(in cm)', 'Weight(in kg)', 'TotalStats',
     'BaseStats', 'Club Name', 'Wage(in Euro)', 'Release Clause', 'Club Position', 'Contract Until',
@@ -19,69 +21,100 @@ df = pd.read_csv('fifa_players_stats.csv', delimiter=",", skiprows=1, names=[
     'RW Rating', 'CAM Rating', 'LM Rating', 'CM Rating', 'RM Rating', 'LWB Rating', 'CDM Rating', 'RWB Rating',
     'LB Rating', 'CB Rating', 'RB Rating', 'GK Rating'])
 
+data['total_rating'] = data['ST Rating'] + data['LW Rating'] + data['LF Rating'] + data['CF Rating'] + \
+                       data['RF Rating'] + data['RW Rating'] + data['CAM Rating'] + data['LM Rating'] + data[
+                           'CM Rating'] + data['RM Rating'] + \
+                       data['LWB Rating'] + data['CDM Rating'] + data['RWB Rating'] + data['LB Rating'] + data[
+                           'CB Rating'] + \
+                       data['RB Rating'] + data['GK Rating']
 
-# Критерий хи-квадрат Пирсона
-def chi_square_test(data):
+
+# С помощью критерия согласия Пирсона хи-квадрат проверить согласованность
+# рейтинг футболиста с нормальным законом (формализовать основные и альтернативные ги-
+# потезы, реализовать самостоятельно).
+
+# гипотезы:
+# 0 гипотеза - нормальное распределение
+# 1 гипотеза - не нормальное распределение
+def ratings(data):
     # Ожидаемые значения
-    expected_freq, bins = np.histogram(data, bins='auto', density=True)
-    expected_freq *= len(data) * np.diff(bins)
+    srednee = data['total_rating'].mean()
+    otklonenie = data['total_rating'].std()
 
-    # Наблюдаемые значения
-    observed_freq, _ = np.histogram(data, bins=bins)
+    observed, bins = np.histogram(data['total_rating'], bins='auto')
+    expected = np.array([stats.norm.cdf(bins[i + 1], srednee, otklonenie) -
+                         stats.norm.cdf(bins[i], srednee, otklonenie) for i in
+                         range(len(bins) - 1)]) * len(data['total_rating'])
+    expected = expected * (observed.sum() / expected.sum())
 
-    # Статистика хи-квадрат
-    chi_square_stat = ((observed_freq - expected_freq) ** 2 / expected_freq).sum()
+    xi_square_nabl = ((observed - expected) ** 2 / expected).sum()
+    print(xi_square_nabl)
+    xi_square_crit = stats.chi2.ppf(0.95, math.ceil(math.log2(data.shape[0])+1)-3)
+    print(xi_square_crit)
 
-    # Степени свободы
-    dof = len(observed_freq) - 1
+    plt.figure(figsize=(10, 6))
+    plt.hist(data['total_rating'], bins=bins, label='Observed', color='blue')
+    plt.plot((bins[1:] + bins[:-1]) / 2, expected, 'o-', label='Expected', color='red')
+    plt.xlabel('Rating')
+    plt.ylabel('Frequency')
+    plt.title('Chi-Squared Test for Normality')
+    plt.legend()
+    plt.show()
 
-    # p-value
-    p_value = 1 - stats.chi2.cdf(chi_square_stat, df=dof)
+    if xi_square_crit > xi_square_nabl:
+        print(f"0 гипотеза (нормальное распределение)")
+    else:
+        print(f"1 гипотеза (ненормальное распределение)")
 
-    return chi_square_stat, p_value
+    return xi_square_nabl
+
+# Ту же самую задачу решить с помощью другого
+# критерия (тоже формализовать гипотезы, но здесь можно воспользоваться готовой реализацией)
 
 
-chi_square_stat, p_value = chi_square_test(df)
-print(f'Chi-square Statistic: {chi_square_stat}, p-value: {p_value}')
+# Задание 2: Проверка однородности и построение графика
+def xi_square_ages(data, age):
+    young = data[data['Age'] < age]['total_rating']
+    old = data[data['Age'] >= age]['total_rating']
 
-# Критерий Колмогорова-Смирнова
-ks_stat, ks_p_value = stats.kstest(df, 'norm', args=(df.mean(), df.std()))
-print(f'KS Statistic: {ks_stat}, p-value: {ks_p_value}')
+    observed_young, bins = np.histogram(young, bins='auto')
+    observed_old, old_bins = np.histogram(old, bins=bins)
+    observed_young = observed_young * (observed_old.sum() / observed_young.sum())
 
-# Генерация данных для возрастов и рейтингов
-ages = np.random.randint(18, 40, size=100)
-young_ratings = df[ages < 30]
-old_ratings = df[ages >= 30]
+    xi_square_nabl = stats.chi2_contingency([observed_young, observed_old])
 
-# Формализация гипотез
-# H0: Рейтинги молодых и возрастных футболистов однородны
-# H1: Рейтинги молодых и возрастных футболистов не однородны
+    plt.figure(figsize=(10, 6))
+    plt.hist(young, bins=bins, label='Young', color='blue')
+    plt.hist(old, bins=bins, label='Old', color='green')
+    plt.xlabel('Rating')
+    plt.ylabel('Frequency')
+    plt.title('Chi-Squared Test for Homogeneity')
+    plt.legend()
+    plt.show()
 
-# Объединение данных
-observed_freq = np.array([
-    np.histogram(young_ratings, bins='auto')[0],
-    np.histogram(old_ratings, bins='auto')[0]
-])
+    return xi_square_nabl
 
-# Ожидаемые значения
-expected_freq = observed_freq.sum(axis=0) * observed_freq.sum(axis=1)[:, None] / observed_freq.sum()
 
-# Статистика хи-квадрат
-chi_square_stat = ((observed_freq - expected_freq) ** 2 / expected_freq).sum()
-dof = (observed_freq.shape[0] - 1) * (observed_freq.shape[1] - 1)
-p_value = 1 - stats.chi2.cdf(chi_square_stat, df=dof)
+# Задание 3: Проверка независимости и построение графика
+# def chi_squared_test_independence(data):
+#     contingency_table = pd.crosstab(data['total_rating'], data['Nationality'])
+#     chi_stat = stats.chi2_contingency(contingency_table)
+#
+#     plt.figure(figsize=(10, 6))
+#     contingency_table.plot(kind='bar', stacked=True)
+#     plt.xlabel('total_rating')
+#     plt.ylabel('Count')
+#     plt.title('Chi-Squared Test for Independence')
+#     plt.show()
+#
+#     return chi_stat
 
-print(f'Chi-square Statistic: {chi_square_stat}, p-value: {p_value}')
 
-# Генерация данных для национальностей и рейтингов
-nationalities = np.random.choice(['A', 'B', 'C'], size=100)
-ratings_by_nationality = pd.crosstab(nationalities, df)
+ratings(data)
 
-# Формализация гипотез
-# H0: Рейтинг и национальность независимы
-# H1: Рейтинг и национальность не независимы
+age = 30
+xi_square = xi_square_ages(data, age)
 
-# Критерий хи-квадрат
-chi_square_stat, p_value, _, _ = stats.chi2_contingency(ratings_by_nationality)
 
-print(f'Chi-square Statistic: {chi_square_stat}, p-value: {p_value}')
+# chi_stat = chi_squared_test_independence(data)
+# print(f'Статистика хи-квадрат: {chi_stat}')
