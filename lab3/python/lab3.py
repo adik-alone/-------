@@ -48,9 +48,12 @@ def ratings(data):
     expected = expected * (observed.sum() / expected.sum())
 
     xi_square_nabl = ((observed - expected) ** 2 / expected).sum()
-    print(xi_square_nabl)
+    print(f'наблюдаемое значение хи-квадрат критерия: {xi_square_nabl}')
     xi_square_crit = stats.chi2.ppf(0.95, math.ceil(math.log2(data.shape[0])+1)-3)
-    print(xi_square_crit)
+    print(f'критическое значение хи-квадрат критерия: {xi_square_crit}')
+
+
+
 
     plt.figure(figsize=(10, 6))
     plt.hist(data['total_rating'], bins=bins, label='Observed', color='blue')
@@ -70,6 +73,15 @@ def ratings(data):
 
 # Ту же самую задачу решить с помощью другого
 # критерия (тоже формализовать гипотезы, но здесь можно воспользоваться готовой реализацией)
+def auto_cecker(data):
+    # Проверить выборку на нормальность
+    statistic, pvalue = stats.kstest(data["total_rating"], 'norm')
+
+    alpha = 0.05  # Уровень значимости
+    if pvalue > alpha:
+        print("Гипотеза о нормальности распределения не отвергается.")
+    else:
+        print("Гипотеза о нормальности распределения отвергается.")
 
 
 # Задание 2: Проверка однородности и построение графика
@@ -111,6 +123,9 @@ def xi_square_ages(data, age):
 
 
 ratings(data)
+print("\n")
+print("Критерий Колмогорова-Смирнова")
+auto_cecker(data)
 
 age = 30
 xi_square = xi_square_ages(data, age)
