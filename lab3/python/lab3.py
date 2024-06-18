@@ -69,11 +69,14 @@ def ratings(data):
     else:
         print(f"1 гипотеза (ненормальное распределение)")
 
+    auto_checker_rating(data)
     return xi_square_nabl
 
 # Ту же самую задачу решить с помощью другого
 # критерия (тоже формализовать гипотезы, но здесь можно воспользоваться готовой реализацией)
 def auto_checker_rating(data):
+    print("\n")
+    print("Критерий Колмогорова-Смирнова")
     # Проверяем выборку на нормальность c помощью критерия Колмогорова-Смирнова
     statistic, pvalue = stats.kstest(data["total_rating"], 'norm')
 
@@ -117,6 +120,8 @@ def xi_square_ages(data, age):
     plt.ylabel('Frequency')
     plt.title('Chi-Squared Test for Homogeneity')
     plt.legend()
+    # plt.savefig("task1.png")
+    # plt.savefig('task2.png')
     plt.show()
 
     if xi_square_crit > xi_square_nabl:
@@ -145,52 +150,52 @@ def auto_checker_age(sample1, sample2):
         print("Нет оснований отвергать нулевую гипотезу: выборки однородны.")
 
 # Задание 3: Проверка независимости и построение графика
-# def chi_squared_test_independence(data):
-#     ratings = data['total_rating']
-#     nations = data['Nationality']
-#
-#     # observed_nation, nation_bins = np.histogram(nations, bins='auto')
-#     data_for = {
-#         'rating': ratings,
-#         'nation': nations
-#     }
-#     df = pd.DataFrame(data_for)
-#     contingency_table = pd.crosstab(df['rating'], df['nation'])
-#
-#     chi2, p_value, dof, expected = stats.chi2_contingency(ratings, nations)
-#
-#     # Выводим результаты теста
-#     print("Наблюдаемое значение критерия хи-квадрат:", chi2)
-#     print("p-значение:", p_value)
-#     print("Степени свободы:", dof)
-#     print("Ожидаемые частоты:", expected)
-#
-#
-#     #С помощью критерия Фишера
-#     odds_ratio, p_val = stats.fisher_exact(contingency_table)
-#
-#     # Вывод результатов
-#     print("Отношение шансов (odds ratio):", odds_ratio)
-#     print("p-значение:", p_val)
-#
-#
-#     # observed_rating, bins = np.histogram(ratings, bins='auto')
-#     # observed_nation, nation_bins = np.histogram(nation, bins=bins)
-#     # observed_rating = observed_rating * (observed_nation.sum() / observed_rating.sum())
-#     #
-#     # # contingency_table = pd.crosstab(data['total_rating'], data['Nationality'])
-#     # chi_stat = stats.chi2_contingency(contingency_table)
-#     # # chi_stat = stats.chi2_contingency([data['total_rating'], data['Nationality']])[0]
-#     #
-#     #
-#     # plt.figure(figsize=(10, 6))
-#     # contingency_table.plot(kind='bar', stacked=True)
-#     # plt.xlabel('total_rating')
-#     # plt.ylabel('Count')
-#     # plt.title('Chi-Squared Test for Independence')
-#     # plt.show()
-#
-#     return chi_stat
+def chi_squared_test_independence(data):
+    ratings = data['total_rating']
+    nations = data['Nationality']
+
+    # observed_nation, nation_bins = np.histogram(nations, bins='auto')
+    data_for = {
+        'rating': ratings,
+        'nation': nations
+    }
+    df = pd.DataFrame(data_for)
+    contingency_table = pd.crosstab(df['rating'], df['nation'])
+
+    chi2, p_value, dof, expected = stats.chi2_contingency(ratings, nations)
+
+    # Выводим результаты теста
+    print("Наблюдаемое значение критерия хи-квадрат:", chi2)
+    print("p-значение:", p_value)
+    print("Степени свободы:", dof)
+    print("Ожидаемые частоты:", expected)
+
+
+    #С помощью критерия Фишера
+    odds_ratio, p_val = stats.fisher_exact(contingency_table)
+
+    # Вывод результатов
+    print("Отношение шансов (odds ratio):", odds_ratio)
+    print("p-значение:", p_val)
+
+
+    # observed_rating, bins = np.histogram(ratings, bins='auto')
+    # observed_nation, nation_bins = np.histogram(nation, bins=bins)
+    # observed_rating = observed_rating * (observed_nation.sum() / observed_rating.sum())
+    #
+    # # contingency_table = pd.crosstab(data['total_rating'], data['Nationality'])
+    # chi_stat = stats.chi2_contingency(contingency_table)
+    # # chi_stat = stats.chi2_contingency([data['total_rating'], data['Nationality']])[0]
+    #
+    #
+    # plt.figure(figsize=(10, 6))
+    # contingency_table.plot(kind='bar', stacked=True)
+    # plt.xlabel('total_rating')
+    # plt.ylabel('Count')
+    # plt.title('Chi-Squared Test for Independence')
+    # plt.show()
+
+    return chi_stat
 
 def task3(data):
 
@@ -274,9 +279,7 @@ def task3(data):
     #
 
 ratings(data)
-print("\n")
-print("Критерий Колмогорова-Смирнова")
-auto_checker_rating(data)
+# auto_checker_rating(data)
 
 age = 30
 xi_square = xi_square_ages(data, age)
